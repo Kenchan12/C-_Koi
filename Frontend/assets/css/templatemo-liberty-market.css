@@ -1,11 +1,3 @@
-/*
-
-TemplateMo 577 Liberty Market
-
-https://templatemo.com/tm-577-liberty-market
-
-*/
-
 /* ---------------------------------------------
 Table of contents
 ------------------------------------------------
@@ -1106,7 +1098,7 @@ Currently Market Style
 }
 
 .currently-market .section-heading .line-dec {
-  margin-left: 0;
+  margin-left: 30px;
 }
 
 .currently-market .filters {
@@ -1257,7 +1249,7 @@ Page Heading Style
 */
 
 .normal-space {
-  padding: 250px 0px 120px 0px !important;
+  padding: 200px 0px 100px 0px !important;
 }
 
 .page-heading {
@@ -1265,7 +1257,7 @@ Page Heading Style
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  padding-top: 230px;
+  padding-top: 150px;
   text-align: center;
   background-color: #2a2a2a;
 }
@@ -1420,16 +1412,12 @@ Explore Style
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  padding: 400px 0px 120px 0px;
+  padding: 120px 0px 120px 0px;
   position: relative;
 }
 
 .discover-items .section-heading {
-  text-align: left;
-}
-
-.discover-items .section-heading .line-dec {
-  margin-left: 0;
+  text-align: center;
 }
 
 .discover-items #search-form {
@@ -1648,9 +1636,14 @@ Details Page Style
   margin-left: 200px;
 }
 
+.item-details-page h3 {
+  font-size: 30px;
+  margin-bottom: 50px;
+}
+
 .item-details-page h4 {
-  font-size: 20px;
-  margin-bottom: 25px;
+  font-size: 25px;
+  margin-top: 50px;
 }
 
 .item-details-page span.author {
@@ -1770,8 +1763,22 @@ Details Page Style
   border: 1px solid #fff;
 }
 
+.item-details-page textarea {
+  color: #fff;
+  background-color: #282b2f;
+  margin-top: 20px;
+  text-align: justify;
+  padding: 30px 40px 30px 40px;
+  border-radius: 20px;
+  width: 100%;
+  max-height: 1200px;
+  border: 1px solid #404245;
+  position: relative;
+  overflow: hidden;
+}
+
 .current-bid {
-  margin-top: 120px;
+  margin-top: 30px;
 }
 
 .current-bid select {
@@ -2243,7 +2250,7 @@ Login Page Style
     display: block;
 }
 
-.login-page .full-height {
+.-page .full-height {
     min-height: 100vh;
 }
 
