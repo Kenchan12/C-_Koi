@@ -83,56 +83,45 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <div class="section-heading">
-            <div class="line-dec"></div>
-            <h2>Xem Các Bài <em>Chia Sẻ</em></h2>
-          </div>
-        </div>        
-        <div class="col-lg-12">
-          <div class="current-bid">
+          <div class="blog-post">
             <div class="row">
-              </a><div class="col-lg-6 col-md-6">
-                <div class="item">
-                  <a href="blog0.html" class="left-img">
-                    <img src="assets/images/oase.png" alt="">
-                  </a>
-                  <div class="right-content">
-                    <h4>OASE BioSmart 5000</h4>
-                    <a>4.500.000</a>
-                    <div class="line-dec"></div>
-                    <h6>Đăng bởi: <em>@emtee</em></h6>
-                    <span class="date">20/10/2024, 22:00</span>
-                  </div>
+              <div class="col-lg-6">
+                <div class="image">
+                  <img id="post-image" src="" alt="" style="border-radius: 20px;">
                 </div>
               </div>
-              <div class="col-lg-6 col-md-6">
-                <div class="item">
-                  <a href="blog2.html" class="left-img">
-                    <img src="assets/images/hikari.avif" alt="">
-                  </a>
-                  <div class="right-content">
-                    <h4>Hikari Koi Gold</h4>
-                    <a>600.000</a>
-                    <div class="line-dec"></div>
-                    <h6>Đăng bởi: <em>@eikei</em></h6>
-                    <span class="date">13/02/2024, 16:07</span>
+
+              <div class="col-lg-6 align-self-center">
+                <h3 id="post-title"></h3>
+                <p>Đăng bởi: <strong><span id="post-author"></span></strong></p> 
+                <p>Đăng lúc: <strong><span id="post-date"></span></strong></p>      
+                <div class="row">
+                  <div class="col-4">
+                    <span class="bid">
+                      Phân Loại<br><strong id="category"></strong><br>
+                    </span>
                   </div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6">
-                <div class="item">
-                  <a href="blog1.html" class="left-img">
-                    <img src="assets/images/aquatop.png" alt="">
-                  </a>
-                  <div class="right-content">
-                    <h4>Aquatop GH-300W</h4>
-                    <a>1.000.000</a>
-                    <div class="line-dec"></div>
-                    <h6>Đăng bởi: <em>@kjuti</em></h6>
-                    <span class="date">08/05/2024, 09:13</span>
+                  <div class="col-4">
+                    <span class="owner">
+                      Giá Bán<br><strong id="price"></strong><br>
+                    </span>
                   </div>
-                </div>
+                </div>     
               </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="line-dec"></div>
+            <h4>Chia Sẻ</h4>
+            <textarea id="post-content" readonly></textarea>
+          </div>
+
+          <div class="section">
+            <div class="line-dec"></div>
+            <h4>Về Các Sản Phẩm Khác</h4>
+            <div class="row" id="related-products">
+              <!-- Sản phẩm khác ở dây -->
             </div>
           </div>
         </div>
@@ -172,5 +161,71 @@
   <script src="assets/js/tabs.js"></script>
   <script src="assets/js/popup.js"></script>
   <script src="assets/js/custom.js"></script>
-  </body>
+<script>
+    window.onload = function() {
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+  
+      const authLink = document.getElementById("auth-link");
+  
+      if (isLoggedIn === "true") {
+        authLink.innerHTML = '<a href="profile.html">Tài Khoản</a>';
+      } else {
+        authLink.innerHTML = '<a href="login.html">Đăng Nhập</a>';
+      }
+
+      // Goi ham load du lieu bai dang blog
+      loadBlogPostData();
+    }
+
+    // Load du lieu bai dang blog tu API
+    function loadBlogPostData(postId) {
+      // Tao URL de lay du lieu cho bai dang theo id
+      const apiUrl = `/posts/${postId}`; // REPLACE
+
+      // Gui yeu cau GET den API
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(post => {
+          // Cap nhat noi dung bai dang tren trang
+          document.getElementById('post-title').textContent = post.productName;
+          document.getElementById('post-image').src = post.imageUrl;
+          document.getElementById('author-name').textContent = post.author;
+          document.getElementById('post-date').textContent = post.date;
+          document.getElementById('category').textContent = post.category;
+          document.getElementById('price').textContent = post.price;
+          document.getElementById('post-content').value = post.content;
+
+          // Hien thi san pham lien quan
+          const relatedProductsContainer = document.getElementById('related-products');
+          post.relatedProducts.forEach(product => {
+            // Tao HTML cho moi san pham lien quan
+            const productElement = `
+              <div class="col-lg-4 col-md-6">
+                <div class="item">
+                  <a href="${product.link}" class="left-img">
+                    <img src="${product.imageUrl}" alt="">
+                  </a>
+                  <div class="right-content">
+                    <h4>${product.productName}</h4>
+                    <a>${product.price}</a>
+                    <div class="buy-now-button">
+                      <a href="${product.link}">Xem</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            // Them san pham lien quan vao container
+            relatedProductsContainer.innerHTML += productElement;
+          });
+        })
+        // Xu ly loi neu yeu cau API khong thanh cong
+        .catch(error => console.error('Loi tai du lieu:', error));
+    }
+
+    // Goi ham loadBlogPostData voi id bai dang '123'
+    const postId = '123';
+    loadBlogPostData(postId);
+  </script>
+</body>
 </html>
