@@ -1,0 +1,9 @@
+create table donhang (
+donhang_id int primary key,
+user_id int not null,
+trangthaidh enum('dang xu li','da hoan thanh','da huy') default'dang xu li',
+tongtien decimal(10,2) not null,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
