@@ -1,0 +1,9 @@
+CREATE table hoca(
+hoca_id int primary key,
+user_id int not null,
+kichthuocho decimal(8,2),
+chatluongnuoc varchar(255),
+created_at timestamp default current_timestamp,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+FOREIGN key( user_id) references users(user_id)
+);
