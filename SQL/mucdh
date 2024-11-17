@@ -1,0 +1,9 @@
+create table mucdh(
+mucdh_id int primary key,
+donhang_id int not null,
+spchamsoc_id int not null,
+soluong int not null,
+gia decimal(10,2) not null,
+FOREIGN KEY (donhang_id) REFERENCES donhang(donhang_id),
+FOREIGN KEY (spchamsoc_id) REFERENCES spchamsoc(spchamsoc_id)
+);
