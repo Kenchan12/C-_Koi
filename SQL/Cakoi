@@ -1,0 +1,13 @@
+create table Cakoi(
+Cakoi_id int primary key,
+user_id int not null,
+name varchar(50) not null,
+giong varchar(50) not null,
+kichthuocca decimal(5,2),
+cannang decimal(5,2),
+tuoi int,
+tinhtrangsuckhoe varchar(255),
+created_at timestamp default current_timestamp,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+FOREIGN key( user_id) references users(user_id)
+);
