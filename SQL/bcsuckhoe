@@ -1,8 +1,0 @@
-create table bcsuckhoe(
-baocao_id int primary key,
-Cakoi_id int not null,
-ngaybaocao date not null,
-tinhtrangsuckhoe varchar(255),
-ghichu text,
-FOREIGN KEY (Cakoi_id) REFERENCES Cakoi(Cakoi_id)
-);
