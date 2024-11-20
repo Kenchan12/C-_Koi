@@ -1,0 +1,94 @@
+﻿@page "/pondDetails/{Id:int}"
+@inject IPondService PondService
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+@using KoiFishManager.Models
+
+<h3>Chi Tiết Hồ Cá</h3>
+
+@if (pond == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <div>
+        <h4>@pond.Name</h4>
+        <p><strong>Size:</strong> @pond.Size m²</p>
+        <p><strong>Depth:</strong> @pond.Depth m</p>
+        <p><strong>Water Quality:</strong> @pond.WaterQuality</p>
+        <p><strong>Koi Fish Quantity:</strong> @pond.KoiFishes.Count</p>
+        <p><strong>Created At:</strong> @pond.CreatedAt.ToString(Configuration["DateTimeFormat"])</p>
+        <p><strong>Updated At:</strong> @pond.UpdatedAt.ToString(Configuration["DateTimeFormat"])</p>
+    </div>
+
+    <!-- Display Koi Fishes -->
+    <div>
+        <h5>Koi Fish in the Pond (@pond.KoiFishes.Count)</h5>
+        @if (pond.KoiFishes.Count == 0)
+        {
+            <p>No koi fish in the pond.</p>
+        }
+        else
+        {
+            <ul>
+                @foreach (var fish in pond.KoiFishes)
+                {
+                    <li>@fish.Name (Color: @fish.Color, Size: @fish.Size cm, Origin: @fish.Origin, Health Status: @fish.HealthStatus)</li>
+                }
+            </ul>
+        }
+    </div>
+
+    <!-- Display Feeding Schedule -->
+    <div>
+        <h5>Feeding Schedule (@pond.FeedingSchedules.Count)</h5>
+        @if (pond.FeedingSchedules.Count == 0)
+        {
+            <p>No feeding schedule available.</p>
+        }
+        else
+        {
+            <ul>
+                @foreach (var schedule in pond.FeedingSchedules)
+                {
+                    <li>@schedule.FeedingTime.ToString(Configuration["DateTimeFormat"]) - Food Type: @schedule.FoodType, Quantity: @schedule.Quantity grams</li>
+                }
+            </ul>
+        }
+    </div>
+
+    <!-- Display Pond Status -->
+    <div>
+        <h5>Pond Status (@pond.PondStatuses.Count)</h5>
+        @if (pond.PondStatuses.Count == 0)
+        {
+            <p>No pond status recorded.</p>
+        }
+        else
+        {
+            <ul>
+                @foreach (var status in pond.PondStatuses)
+                {
+                    <li>Temperature: @status.Temperature °C, pH Level: @status.PHLevel, Water Level: @status.WaterLevel m, Recorded At: @status.RecordedAt.ToString(Configuration["DateTimeFormat"])</li>
+                }
+            </ul>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a href="/ponds" class="btn btn-primary">Quay lại Danh Sách Hồ</a>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private PondResponse pond = new PondResponse();
+
+    protected override async Task OnInitializedAsync()
+    {
+        pond = await PondService.GetPondByIdAsync(Id);
+    }
+
+ 
+}

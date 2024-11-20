@@ -1,0 +1,99 @@
+﻿@page "/ponds"
+@inject IPondService PondService
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+@using KoiFishManager.Models
+@using KoiFishManager.Web.Components
+
+<h3>Danh sách Hồ Cá</h3>
+
+<!-- Create Pond Button -->
+<div class="col button-top">
+    <a href="/pondCreate" class="btn btn-success">Tạo Hồ Mới</a>
+</div>
+
+@if (pondList == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else if (pondList.Count == 0)
+{
+    <div>Không có hồ cá nào trong hệ thống.</div>
+}
+else
+{
+    <div class="row mt-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên Hồ</th>
+                    <th>Diện Tích</th>
+                    <th>Độ Sâu</th>
+                    <th>Chất Lượng Nước</th>
+                    <th>Ngày Tạo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pond in pondList)
+                {
+                    <tr>
+                        <td>@pond.Name</td>
+                        <td>@pond.Size m²</td>
+                        <td>@pond.Depth m</td>
+                        <td>@pond.WaterQuality</td>
+                        <td>@pond.CreatedAt.ToString(Configuration["DateTimeFormat"])</td>
+                        <td>
+                            <a href="/pondDetails/@pond.Id" class="btn btn-primary">Chi Tiết</a>
+                            <a href="/pondEdit/@pond.Id" class="btn btn-warning">Sửa</a>
+                            <button class="btn btn-danger" @onclick="() => OnDeletePond(pond.Id)">Xóa</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<!-- Confirmation Modal -->
+<Confirmation ConfirmationMessage="Bạn có chắc chắn muốn xóa hồ cá này?"
+              ConfirmationTitle="Xóa Hồ Cá"
+              @ref="DeleteConfirmation"
+              ConfirmationChanged="OnConfirmDeletePond">
+</Confirmation>
+
+@code {
+    private List<PondResponse> pondList;
+    private int pondIdToDelete;
+    private Confirmation DeleteConfirmation { get; set; }
+
+    // Load the list of ponds
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            pondList = await PondService.GetAllPondsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error fetching ponds: " + ex.Message);
+        }
+    }
+
+    // Handler for clicking the delete button
+    private void OnDeletePond(int pondId)
+    {
+        pondIdToDelete = pondId;
+        DeleteConfirmation.Show();
+    }
+
+    // Confirm deletion of a pond
+    private async Task OnConfirmDeletePond(bool confirmed)
+    {
+        if (confirmed)
+        {
+            await PondService.DeletePondAsync(pondIdToDelete);
+            pondList = await PondService.GetAllPondsAsync(); // Refresh the list after deletion
+        }
+    }
+}
