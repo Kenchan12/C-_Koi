@@ -32,7 +32,7 @@ else
             <ul>
                 @foreach (var fish in pond.KoiFishes)
                 {
-                    <li>@fish.Name (Màu sắc: @fish.Color, Kích thước: @fish.Size cm, Xuất xứ: @fish.Origin, Sức khỏe: @fish.HealthStatus)</li>
+                    <li>@fish.Name (Màu sắc: @fish.Color | Kích thước: @fish.Size cm | Xuất xứ: @fish.Origin | Sức khỏe: @fish.HealthStatus)</li>
                 }
             </ul>
         }
@@ -50,7 +50,7 @@ else
             <ul>
                 @foreach (var schedule in pond.FeedingSchedules)
                 {
-                    <li>@schedule.FeedingTime.ToString(Configuration["DateTimeFormat"]) - Loại thức ăn: @schedule.FoodType, Số lượng: @schedule.Quantity grams</li>
+                    <li>@schedule.FeedingTime.ToString(Configuration["DateTimeFormat"]) - Loại thức ăn: @schedule.FoodType (@schedule.Quantity grams)</li>
                 }
             </ul>
         }
