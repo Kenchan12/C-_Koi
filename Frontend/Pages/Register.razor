@@ -50,26 +50,19 @@
 
     private async Task HandleRegister()
     {
-        ShowErrors = false;
-        var response = await Http.PostAsJsonAsync("https://yourapi.com/register", RegisterModel);
-
-        if (response.IsSuccessStatusCode)
+        // Attempt to register the user using the AuthService
+        var registerResponse = await AuthService.Register(RegisterModel);
+        
+        if (registerResponse.Successful)
         {
-            var result = await response.Content.ReadFromJsonAsync<RegisterResponse>();
-            if (result.Successful)
-            {
-                NavigationManager.NavigateTo("/login");
-            }
-            else
-            {
-                ShowErrors = true;
-                Error = result.Error;
-            }
+            // If registration is successful, navigate to the login page or home page
+            NavigationManager.NavigateTo("/login");
         }
         else
         {
+            // If registration fails, show the error message
             ShowErrors = true;
-            Error = "Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.";
+            Error = registerResponse.Error;
         }
     }
 }
