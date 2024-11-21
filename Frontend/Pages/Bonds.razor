@@ -5,7 +5,7 @@
 @using KoiFishManager.Models
 @using KoiFishManager.Web.Components
 
-<h3>Danh sách Hồ Cá</h3>
+<h3>Danh Sách Hồ Cá</h3>
 
 <!-- Create Pond Button -->
 <div class="col button-top">
@@ -18,7 +18,7 @@
 }
 else if (pondList.Count == 0)
 {
-    <div>Không có hồ cá nào trong hệ thống.</div>
+    <div>Danh sách hồ trống.</div>
 }
 else
 {
@@ -26,18 +26,18 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th>Tên Hồ</th>
-                    <th>Diện Tích</th>
-                    <th>Độ Sâu</th>
-                    <th>Chất Lượng Nước</th>
-                    <th>Ngày Tạo</th>
+                    <th>Tên hồ</th>
+                    <th>Kích thước (m²)</th>
+                    <th>Độ sâu (m)</th>
+                    <th>Chất lượng nước</th>
+                    <th>Thời gian tạo</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var pond in pondList)
                 {
-                    <tr>
+                    <tr style="vertical-align: middle;">
                         <td>@pond.Name</td>
                         <td>@pond.Size m²</td>
                         <td>@pond.Depth m</td>
