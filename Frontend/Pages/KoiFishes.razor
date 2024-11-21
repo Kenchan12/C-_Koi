@@ -1,0 +1,102 @@
+﻿@page "/koifishes"
+@inject IKoiFishService KoiFishService
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+@using KoiFishManager.Models
+@using KoiFishManager.Models.KoiFish
+@using KoiFishManager.Web.Components
+
+<h3>Danh Sách Cá Koi</h3>
+
+<!-- Create Koi Fish Button -->
+<div class="col button-top">
+    <a href="/koiFishCreate" class="btn btn-success">Thêm cá mới</a>
+</div>
+
+@if (koiFishList == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else if (koiFishList.Count == 0)
+{
+    <div>Danh sách cá trống.</div>
+}
+else
+{
+    <div class="row mt-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên cá</th>
+                    <th>Màu sắc</th>
+                    <th>Kích thước</th>
+                    <th>Xuất xứ</th>
+                    <th>Sức khỏe</th>
+                    <th>Thời gian thêm</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var koiFish in koiFishList)
+                {
+                    <tr style="vertical-align: middle;">
+                        <td>@koiFish.Name</td>
+                        <td>@koiFish.Color</td>
+                        <td>@koiFish.Size</td>
+                        <td>@koiFish.Origin</td>
+                        <td>@koiFish.HealthStatus</td>
+                        <td>@koiFish.CreatedAt.ToString(Configuration["DateTimeFormat"])</td>
+                        <td>
+                            <a href="/koiFishDetails/@koiFish.Id" class="btn btn-primary">Xem</a>
+                            <a href="/koiFishEdit/@koiFish.Id" class="btn btn-warning">Sửa</a>
+                            <button class="btn btn-danger" @onclick="() => OnDeleteKoiFish(koiFish.Id)">Xóa</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<!-- Confirmation Modal -->
+<Confirmation ConfirmationMessage="Are you sure you want to delete this koi fish?"
+              ConfirmationTitle="Delete Koi Fish"
+              @ref="DeleteConfirmation"
+              ConfirmationChanged="OnConfirmDeleteKoiFish">
+</Confirmation>
+
+@code {
+    private List<KoiFishResponse> koiFishList;
+    private int koiFishIdToDelete;
+    private Confirmation DeleteConfirmation { get; set; }
+
+    // Load the list of koi fish
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            koiFishList = await KoiFishService.GetAllKoiFishByUserIdAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error fetching koi fish: " + ex.Message);
+        }
+    }
+
+    // Handler for clicking the delete button
+    private void OnDeleteKoiFish(int koiFishId)
+    {
+        koiFishIdToDelete = koiFishId;
+        DeleteConfirmation.Show();
+    }
+
+    // Confirm deletion of a koi fish
+    private async Task OnConfirmDeleteKoiFish(bool confirmed)
+    {
+        if (confirmed)
+        {
+            await KoiFishService.DeleteKoiFishAsync(koiFishIdToDelete);
+            koiFishList = await KoiFishService.GetAllKoiFishByUserIdAsync(); // Refresh the list after deletion
+        }
+    }
+}

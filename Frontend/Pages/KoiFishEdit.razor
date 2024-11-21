@@ -1,0 +1,106 @@
+﻿@page "/koiFishEdit/{Id:int}"
+@inject IKoiFishService KoiFishService
+@inject IPondService PondService
+@inject NavigationManager Navigation
+@using KoiFishManager.Models.KoiFish
+@using KoiFishManager.Models.Pond
+
+<h3>Cập Nhật Tình Trạng Cá</h3>
+
+<EditForm Model="@editKoiFish" OnValidSubmit="OnEditKoiFish">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="name">Tên cá</label>
+        <InputText id="name" class="form-control" @bind-Value="editKoiFish.Name" />
+    </div>
+
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="color">Màu sắc</label>
+        <InputText id="color" class="form-control" @bind-Value="editKoiFish.Color" />
+    </div>
+
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="size">Kích thước (cm)</label>
+        <InputNumber id="size" class="form-control" @bind-Value="editKoiFish.Size" />
+    </div>
+
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="origin">Xuất xứ</label>
+        <InputText id="origin" class="form-control" @bind-Value="editKoiFish.Origin" />
+    </div>
+
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="healthStatus">Sức khỏe</label>
+        <InputText id="healthStatus" class="form-control" @bind-Value="editKoiFish.HealthStatus" />
+    </div>
+
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="pondId">Hồ nuôi</label>
+        <select id="pondId" class="form-control" @bind="editKoiFish.PondId">
+            <option value=""> </option>
+            @foreach (var pond in pondList)
+            {
+                <option value="@pond.Id">@pond.Name</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-warning">Cập nhật</button>
+</EditForm>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private KoiFishRequest editKoiFish = new KoiFishRequest();
+
+    private KoiFishDetailResponse response = new KoiFishDetailResponse();
+
+    private List<PondResponse> pondList;
+
+   
+
+    // Load Koi fish details and the list of ponds
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Get Koi Fish details by Id
+            response = await KoiFishService.GetKoiFishByIdAsync(Id);
+            editKoiFish = new KoiFishRequest
+                {
+                    Name = response.Name,
+                    Color = response.Color,
+                    Size = response.Size,
+                    Origin = response.Origin,
+                    HealthStatus = response.HealthStatus,
+                        PondId = response.PondId
+                    
+                };
+
+            // Load list of ponds for the dropdown
+            pondList = await PondService.GetAllPondsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task OnEditKoiFish()
+    {
+        try
+        {
+
+
+            // Update Koi Fish with selected pond ID
+            await KoiFishService.UpdateKoiFishAsync(Id, editKoiFish);
+            Navigation.NavigateTo("/koiFishes");  // Redirect to koi fish list after update
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error editing koi fish: {ex.Message}");
+        }
+    }
+}

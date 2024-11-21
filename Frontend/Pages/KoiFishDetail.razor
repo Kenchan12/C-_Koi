@@ -1,0 +1,45 @@
+﻿@page "/koiFishDetails/{Id:int}"
+@inject IKoiFishService KoiFishService
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+@using KoiFishManager.Models
+@using KoiFishManager.Models.KoiFish
+
+@if (koiFish == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <div>
+        <h3 style="margin-bottom: 10px;">@koiFish.Name</h3>
+        <p><strong>Màu sắc:</strong> @koiFish.Color</p>
+        <p><strong>Kích thước:</strong> @koiFish.Size cm</p>
+        <p><strong>Xuất xứ:</strong> @koiFish.Origin</p>
+        <p><strong>Sức khỏe:</strong> @koiFish.HealthStatus</p>
+        <p><strong>Thêm lúc:</strong> @koiFish.CreatedAt.ToString(Configuration["DateTimeFormat"])</p>
+        <p><strong>Cập nhật lúc:</strong> @koiFish.UpdatedAt.ToString(Configuration["DateTimeFormat"])</p>
+    </div>
+
+    <!-- Display Pond Information -->
+    <div>
+        <p><strong>Hồ nuôi:</strong> @koiFish.Pond?.Name</p>
+    </div>
+
+   
+ 
+
+    <div class="mt-4">
+        <a href="/KoiFishes" class="btn btn-primary">Danh Sách Cá Koi</a>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private KoiFishDetailResponse koiFish = new KoiFishDetailResponse();
+
+    protected override async Task OnInitializedAsync()
+    {
+        koiFish = await KoiFishService.GetKoiFishByIdAsync(Id);
+    }
+}
