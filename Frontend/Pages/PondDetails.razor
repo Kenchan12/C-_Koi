@@ -50,7 +50,7 @@ else
             <ul>
                 @foreach (var schedule in pond.FeedingSchedules)
                 {
-                    <li>@schedule.FeedingTime.ToString(Configuration["DateTimeFormat"]) - Loại thức ăn: @schedule.FoodType, Quantity: @schedule.Quantity grams</li>
+                    <li>@schedule.FeedingTime.ToString(Configuration["DateTimeFormat"]) - Loại thức ăn: @schedule.FoodType, Số lượng: @schedule.Quantity grams</li>
                 }
             </ul>
         }
