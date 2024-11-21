@@ -4,8 +4,6 @@
 @inject IConfiguration Configuration
 @using KoiFishManager.Models
 
-<h3>Chi Tiết Hồ Cá</h3>
-
 @if (pond == null)
 {
     <LoadingIndicator></LoadingIndicator>
@@ -13,28 +11,28 @@
 else
 {
     <div>
-        <h4>@pond.Name</h4>
-        <p><strong>Size:</strong> @pond.Size m²</p>
-        <p><strong>Depth:</strong> @pond.Depth m</p>
-        <p><strong>Water Quality:</strong> @pond.WaterQuality</p>
-        <p><strong>Koi Fish Quantity:</strong> @pond.KoiFishes.Count</p>
-        <p><strong>Created At:</strong> @pond.CreatedAt.ToString(Configuration["DateTimeFormat"])</p>
-        <p><strong>Updated At:</strong> @pond.UpdatedAt.ToString(Configuration["DateTimeFormat"])</p>
+        <h3 style="margin-bottom: 10px;">@pond.Name</h3>
+        <p><strong>Kích thước:</strong> @pond.Size m²</p>
+        <p><strong>Độ sâu:</strong> @pond.Depth m</p>
+        <p><strong>Chất lượng nước:</strong> @pond.WaterQuality</p>
+        <p><strong>Số lượng cá:</strong> @pond.KoiFishes.Count</p>
+        <p><strong>Tạo lúc:</strong> @pond.CreatedAt.ToString(Configuration["DateTimeFormat"])</p>
+        <p><strong>Cập nhật lúc:</strong> @pond.UpdatedAt.ToString(Configuration["DateTimeFormat"])</p>
     </div>
 
     <!-- Display Koi Fishes -->
     <div>
-        <h5>Koi Fish in the Pond (@pond.KoiFishes.Count)</h5>
+       <p><strong>Danh sách cá Koi trong hồ (@pond.KoiFishes.Count)</strong></p>
         @if (pond.KoiFishes.Count == 0)
         {
-            <p>No koi fish in the pond.</p>
+            <p>Không có cá trong hồ.</p>
         }
         else
         {
             <ul>
                 @foreach (var fish in pond.KoiFishes)
                 {
-                    <li>@fish.Name (Color: @fish.Color, Size: @fish.Size cm, Origin: @fish.Origin, Health Status: @fish.HealthStatus)</li>
+                    <li>@fish.Name (Màu sắc: @fish.Color, Kích thước: @fish.Size cm, Xuất xứ: @fish.Origin, Sức khỏe: @fish.HealthStatus)</li>
                 }
             </ul>
         }
@@ -42,17 +40,17 @@ else
 
     <!-- Display Feeding Schedule -->
     <div>
-        <h5>Feeding Schedule (@pond.FeedingSchedules.Count)</h5>
+        <p><strong>Lịch cho ăn (@pond.FeedingSchedules.Count)</strong></p>
         @if (pond.FeedingSchedules.Count == 0)
         {
-            <p>No feeding schedule available.</p>
+            <p>Không tìm thấy lịch cho ăn.</p>
         }
         else
         {
             <ul>
                 @foreach (var schedule in pond.FeedingSchedules)
                 {
-                    <li>@schedule.FeedingTime.ToString(Configuration["DateTimeFormat"]) - Food Type: @schedule.FoodType, Quantity: @schedule.Quantity grams</li>
+                    <li>@schedule.FeedingTime.ToString(Configuration["DateTimeFormat"]) - Loại thức ăn: @schedule.FoodType, Quantity: @schedule.Quantity grams</li>
                 }
             </ul>
         }
@@ -60,24 +58,24 @@ else
 
     <!-- Display Pond Status -->
     <div>
-        <h5>Pond Status (@pond.PondStatuses.Count)</h5>
+       <p><strong>Tình trạng hồ (@pond.PondStatuses.Count)</strong></p>
         @if (pond.PondStatuses.Count == 0)
         {
-            <p>No pond status recorded.</p>
+            <p>Không tìm thấy tình trạng hồ.</p>
         }
         else
         {
             <ul>
                 @foreach (var status in pond.PondStatuses)
                 {
-                    <li>Temperature: @status.Temperature °C, pH Level: @status.PHLevel, Water Level: @status.WaterLevel m, Recorded At: @status.RecordedAt.ToString(Configuration["DateTimeFormat"])</li>
+                    <li>Nhiệt độ: @status.Temperature °C, Độ pH: @status.PHLevel, Mực nước: @status.WaterLevel m, Ghi nhận lúc: @status.RecordedAt.ToString(Configuration["DateTimeFormat"])</li>
                 }
             </ul>
         }
     </div>
 
     <div class="mt-4">
-        <a href="/ponds" class="btn btn-primary">Quay lại Danh Sách Hồ</a>
+        <a href="/ponds" class="btn btn-primary">Danh Sách Hồ</a>
     </div>
 }
 
