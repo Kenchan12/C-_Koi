@@ -3,33 +3,33 @@
 @inject NavigationManager Navigation
 @using KoiFishManager.Models
 
-<h3>Sửa Hồ Cá</h3>
+<h3>Cập Nhật Tình Trạng Hồ</h3>
 
 <EditForm Model="@editPond" OnValidSubmit="OnEditPond">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="form-group">
-        <label for="name">Tên Hồ</label>
-        <InputText id="name" class="form-control" @bind-Value="response.Name" />
+    <div class="form-group" style="margin-bottom: 10px">
+    <label for="name">Tên hồ</label>
+    <InputText id="name" class="form-control" @bind-Value="response.Name" />
     </div>
-
-    <div class="form-group">
-        <label for="size">Diện Tích (m²)</label>
+    
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="size">Kích thước (m²)</label>
         <InputNumber id="size" class="form-control" @bind-Value="response.Size" />
     </div>
-
-    <div class="form-group">
-        <label for="depth">Độ Sâu (m)</label>
+    
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="depth">Độ sâu (m)</label>
         <InputNumber id="depth" class="form-control" @bind-Value="response.Depth" />
     </div>
-
-    <div class="form-group">
-        <label for="waterQuality">Chất Lượng Nước</label>
+    
+    <div class="form-group" style="margin-bottom: 10px">
+        <label for="waterQuality">Chất lượng nước</label>
         <InputText id="waterQuality" class="form-control" @bind-Value="response.WaterQuality" />
     </div>
-
-    <button type="submit" class="btn btn-warning">Cập Nhật Hồ</button>
+    
+    <button type="submit" class="btn btn-warning">Cập nhật</button>
 </EditForm>
 
 @code {
